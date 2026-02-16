@@ -1,0 +1,1108 @@
+
+<!DOCTYPE html>
+<html lang="ms" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permata FC - Kelab Bola Sepak</title>
+    
+    <!-- Tailwind CSS (for modern styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Menggunakan 'Chakra Petch' untuk tajuk supaya nampak lebih sporty/futuristik -->
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Custom Config for Brand Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Merah yang lebih 'deep' dan sporty
+                        permataRed: '#D50000', 
+                        permataRedDark: '#8B0000',
+                        // Kuning Emas (Gold)
+                        permataGold: '#FFD600',
+                        permataDark: '#1a1a1a',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        sport: ['Chakra Petch', 'sans-serif'], // Font khas untuk tajuk
+                    },
+                    backgroundImage: {
+                        'sport-gradient': 'linear-gradient(135deg, #D50000 0%, #8B0000 100%)',
+                        'card-gradient': 'linear-gradient(to bottom right, #ffffff, #fffdf5)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles & Utilities */
+        body {
+            background-color: #f3f4f6;
+        }
+        
+        /* Sporty diagonal background pattern */
+        .hero-bg {
+            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Garisan-garisan dinamik di background */
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%), 
+                linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%), 
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
+            background-size: 20px 20px;
+        }
+
+        /* Shape divider di bahagian bawah hero */
+        .custom-shape-divider-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .custom-shape-divider-bottom svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 60px;
+        }
+
+        .custom-shape-divider-bottom .shape-fill {
+            fill: #f3f4f6; /* Sama dengan warna background body */
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #D50000, #8B0000);
+            border-radius: 4px;
+        }
+
+        /* Card Hover Effects */
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(185, 28, 28, 0.15); /* Bayang merah */
+            border-color: #FFD600;
+        }
+
+        /* Modal Transitions */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <!-- NAVIGATION: Gradient Background -->
+    <nav class="bg-sport-gradient text-white sticky top-0 z-50 shadow-xl border-b-4 border-permataGold">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Brand -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <!-- Logo Placeholder: White circle with Icon -->
+                    <div class="bg-white rounded-full p-1 w-14 h-14 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition duration-300 border-2 border-permataGold">
+                        <i class="fa-solid fa-shield-cat text-3xl text-permataRed"></i>
+                    </div>
+                    <div class="flex flex-col justify-center h-full">
+                        <span class="font-sport font-bold text-2xl tracking-tighter leading-none italic mt-1">PERMATA <span class="text-permataGold">FC</span></span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-1 font-bold text-sm tracking-wide">
+                    <a href="#utama" class="px-4 py-2 rounded-lg hover:bg-white/10 hover:text-permataGold transition">UTAMA</a>
+                    <a href="#berita" class="px-4 py-2 rounded-lg hover:bg-white/10 hover:text-permataGold transition">BERITA</a>
+                    <a href="#jadual" class="px-4 py-2 rounded-lg hover:bg-white/10 hover:text-permataGold transition">JADUAL</a>
+                    <a href="#keputusan" class="px-4 py-2 rounded-lg hover:bg-white/10 hover:text-permataGold transition">KEPUTUSAN</a>
+                    <a href="#pasukan" class="px-4 py-2 rounded-lg hover:bg-white/10 hover:text-permataGold transition">PASUKAN</a>
+                    <a href="#galeri" class="px-4 py-2 rounded-lg hover:bg-white/10 hover:text-permataGold transition">GALERI</a>
+                    <a href="#ajk" class="px-4 py-2 rounded-lg hover:bg-white/10 hover:text-permataGold transition">AJK</a>
+                    <a href="#hubungi" class="ml-2 bg-permataGold text-red-900 px-5 py-2 rounded-full hover:bg-white hover:text-permataRed transition shadow-lg transform hover:-translate-y-0.5">HUBUNGI</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none text-permataGold">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-red-900 border-t border-red-800 absolute w-full shadow-2xl">
+            <div class="flex flex-col px-4 py-4 space-y-3 font-bold text-white">
+                <a href="#utama" class="mobile-link block hover:text-permataGold">UTAMA</a>
+                <a href="#berita" class="mobile-link block hover:text-permataGold">BERITA</a>
+                <a href="#jadual" class="mobile-link block hover:text-permataGold">JADUAL</a>
+                <a href="#keputusan" class="mobile-link block hover:text-permataGold">KEPUTUSAN</a>
+                <a href="#pasukan" class="mobile-link block hover:text-permataGold">PASUKAN</a>
+                <a href="#galeri" class="mobile-link block hover:text-permataGold">GALERI</a>
+                <a href="#ajk" class="mobile-link block hover:text-permataGold">AJK</a>
+                <a href="#hubungi" class="mobile-link block text-permataGold">HUBUNGI KAMI</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION: Sporty Gradient + Divider -->
+    <section id="utama" class="hero-bg text-white py-24 lg:py-36 relative">
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 bg-black/30 backdrop-blur-sm border border-permataGold/30 rounded-full px-4 py-1 mb-6 animate-pulse">
+                <span class="w-2 h-2 rounded-full bg-permataGold"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-permataGold">Musim 2026 Kini Bermula</span>
+            </div>
+            
+            <h1 class="font-sport text-5xl md:text-7xl font-bold mb-6 leading-none italic uppercase drop-shadow-lg">
+                Permata <span class="text-permataGold">FC</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-100 max-w-2xl mx-auto mb-10 font-light">
+                Membangunkan Juara Masa Depan. <br>
+                <span class="text-permataGold font-semibold">Disiplin. Kemahiran. Semangat.</span>
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#jadual" class="bg-gradient-to-r from-permataGold to-yellow-400 text-red-900 font-black py-4 px-10 rounded-full shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/50 hover:scale-105 transition transform uppercase tracking-wide">
+                    <i class="fa-regular fa-calendar-days mr-2"></i> Lihat Jadual
+                </a>
+                <a href="#hubungi" class="bg-transparent border-2 border-white text-white font-bold py-4 px-10 rounded-full hover:bg-white hover:text-permataRed transition uppercase tracking-wide">
+                    Sertai Kami
+                </a>
+            </div>
+        </div>
+
+        <!-- Slanted Shape Divider -->
+        <div class="custom-shape-divider-bottom">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M1200 120L0 16.48 0 0 1200 0 1200 120z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- TENTANG KAMI (NEW SECTION) -->
+    <section id="tentang" class="py-16 bg-white relative z-20 -mt-2">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center bg-white rounded-3xl shadow-xl border-t-4 border-permataGold p-8 md:p-12 transform -translate-y-20">
+                <div class="w-16 h-16 bg-permataRed text-white rounded-full flex items-center justify-center text-2xl mx-auto mb-6 shadow-lg">
+                    <i class="fa-solid fa-handshake-angle"></i>
+                </div>
+                <h2 class="font-sport text-3xl md:text-4xl font-bold text-gray-900 mb-6 uppercase italic">Dari Komuniti, Untuk Komuniti</h2>
+                
+                <p class="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
+                    <span class="font-bold text-permataRed">Permata FC</span> bukan sekadar kelab bola sepak; ia adalah satu inisiatif komuniti yang lahir daripada jiwa. Ditubuhkan hasil gabungan tenaga ibu bapa yang prihatin dan sokongan padu daripada <span class="font-bold text-gray-900">PIBG SK Seri Makmur, Sungai Besar</span>.
+                </p>
+
+                <div class="w-24 h-1 bg-permataGold mx-auto mb-6 rounded-full"></div>
+
+                <p class="text-gray-600 leading-relaxed">
+                    Kami menyediakan platform terbaik untuk <strong>anak-anak kampung menyerlahkan bakat</strong> mereka. Sebagai sebuah kelab yang berwawasan jauh, misi kami adalah mencungkil 'permata' yang tersembunyi—memastikan setiap pelajar mempunyai peluang untuk bersinar, membina disiplin, dan melangkah jauh dalam arena bola sepak.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AJK -->
+    <section id="ajk" class="py-20 bg-gray-50 border-t border-gray-200">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="font-sport text-3xl md:text-4xl font-bold text-gray-900 uppercase italic mb-2">Ahli Jawatankuasa (AJK)</h2>
+                <p class="text-gray-500 font-medium">Pilih tab untuk melihat senarai jawatankuasa.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 mb-10">
+                <button class="ajk-tab-btn px-5 py-3 rounded-full border text-xs md:text-sm font-black uppercase tracking-wide transition bg-white text-gray-600 border-gray-200" data-target="ajk-permuafakatan">
+                    Jawatankuasa Permuafakatan Ibu Bapa
+                </button>
+                <button class="ajk-tab-btn px-5 py-3 rounded-full border text-xs md:text-sm font-black uppercase tracking-wide transition bg-white text-gray-600 border-gray-200" data-target="ajk-elit">
+                    Jawatankuasa Elit Bola Sepak SK Seri Makmur
+                </button>
+            </div>
+
+            <div id="ajk-permuafakatan" class="ajk-tab-panel">
+                <div class="text-center mb-12">
+                    <h3 class="font-sport text-2xl md:text-3xl font-bold text-gray-900 uppercase italic mb-2">Jawatankuasa Permuafakatan Ibu Bapa</h3>
+                    <div class="inline-block bg-permataGold text-red-900 font-bold px-4 py-1 rounded-full text-sm uppercase tracking-wider">Sesi 2026</div>
+                </div>
+
+                <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+                    <!-- Pengerusi & Top Management -->
+                    <div class="md:col-span-2 grid md:grid-cols-3 gap-6 text-center">
+                        <!-- Pengerusi -->
+                        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-permataRed md:col-start-2">
+                            <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Pengerusi</h3>
+                            <p class="font-bold text-lg text-gray-900">Puan Musdalilah Binti Ahmad Salim</p>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 grid md:grid-cols-3 gap-6 text-center">
+                         <!-- Naib Pengerusi -->
+                        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-gray-300">
+                             <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Naib Pengerusi</h3>
+                             <p class="font-bold text-lg text-gray-400 italic">(Kosong)</p>
+                        </div>
+                         <!-- Setiausaha -->
+                        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-permataGold">
+                             <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Setiausaha</h3>
+                             <p class="font-bold text-lg text-gray-900">Puan Siti Norhana Binti Mezi</p>
+                        </div>
+                         <!-- Bendahari -->
+                        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-permataGold">
+                             <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Bendahari</h3>
+                             <p class="font-bold text-lg text-gray-900">Puan Nur Hamimi Binti Mohd Noor</p>
+                        </div>
+                    </div>
+
+                    <!-- Functional Roles -->
+                    <div class="md:col-span-2 grid md:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Pengurus Pasukan -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="text-permataRed font-black uppercase tracking-wide mb-4 border-b pb-2">Pengurus Pasukan</h3>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-permataGold mt-1.5 mr-2 flex-shrink-0"></span>
+                                    <span><strong>Puan Siti Azlina Binti Alwi</strong> <br><span class="text-xs text-gray-500 uppercase">Ketua</span></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-gray-300 mt-1.5 mr-2 flex-shrink-0"></span>
+                                    <span><strong>Puan Norhafizah Binti Mohamad Yunus</strong> <br><span class="text-xs text-gray-500 uppercase">Bawah 12 Tahun</span></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-gray-300 mt-1.5 mr-2 flex-shrink-0"></span>
+                                    <span><strong>Encik Asmawi Bin Ahmad</strong> <br><span class="text-xs text-gray-500 uppercase">Bawah 10 Tahun</span></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-gray-300 mt-1.5 mr-2 flex-shrink-0"></span>
+                                    <span><strong>Puan Sarah Binti Haris</strong> <br><span class="text-xs text-gray-500 uppercase">Bawah 8 Tahun</span></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Penajaan -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="text-permataRed font-black uppercase tracking-wide mb-4 border-b pb-2">Penajaan</h3>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Encik Aziz Bin Mashud</li>
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Puan Nurul Aina Binti Saleh</li>
+                            </ul>
+                        </div>
+
+                        <!-- Fisio / Perubatan -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="text-permataRed font-black uppercase tracking-wide mb-4 border-b pb-2">Fisio / Perubatan</h3>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Encik Mohammad Khairul Nazrin Bin Mohammad Norasbi</li>
+                            </ul>
+                        </div>
+
+                        <!-- Logistik -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="text-permataRed font-black uppercase tracking-wide mb-4 border-b pb-2">Logistik</h3>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Encik Mohammad Khairul Nazrin Bin Mohammad Norasbi</li>
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Puan Nurfarehan Binti Mohamad Omar</li>
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Puan Najwa Binti Samsuri</li>
+                            </ul>
+                        </div>
+
+                        <!-- Kebajikan -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="text-permataRed font-black uppercase tracking-wide mb-4 border-b pb-2">Kebajikan</h3>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Puan Ermelawati Binti Maskuri</li>
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Puan Intan Farhana Binti Ahmad Kamal</li>
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Puan Siti Yam Mariani Binti Md Sadzran</li>
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Puan Rafidah Binti Mohd Sabli</li>
+                            </ul>
+                        </div>
+
+                        <!-- Media Sosial & Dokumentasi -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="text-permataRed font-black uppercase tracking-wide mb-4 border-b pb-2">Media Sosial</h3>
+                            <ul class="space-y-3 text-sm mb-6">
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Puan Siti Azlina Binti Alwi</li>
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Encik Aziz Bin Mashud</li>
+                            </ul>
+                            
+                            <h3 class="text-permataRed font-black uppercase tracking-wide mb-4 border-b pb-2">Dokumentasi</h3>
+                            <p class="text-gray-400 italic text-sm">(Kosong)</p>
+                        </div>
+
+                        <!-- Tugas Khas -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="text-permataRed font-black uppercase tracking-wide mb-4 border-b pb-2">Tugas Khas</h3>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Encik Aziz Bin Mashud</li>
+                                <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>Encik Asmawi Bin Ahmad</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="ajk-elit" class="ajk-tab-panel hidden">
+                <div class="text-center mb-12">
+                    <h3 class="font-sport text-2xl md:text-3xl font-bold text-gray-900 uppercase italic mb-2">Jawatankuasa Elit Bola Sepak SK Seri Makmur</h3>
+                    <div class="inline-block bg-permataRed text-white font-bold px-4 py-1 rounded-full text-sm uppercase tracking-wider">Senarai Terkini</div>
+                </div>
+
+                <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 h-2 w-2 rounded-full bg-permataGold flex-shrink-0"></span>
+                                <span><strong>HR11</strong> – Pn. Nurul Aini Haryati binti Yahaya <span class="text-xs text-gray-500 uppercase">[P]</span></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 h-2 w-2 rounded-full bg-gray-300 flex-shrink-0"></span>
+                                <span><strong>HR12</strong> – En. Muhammad Mahfudz bin Ismail <span class="text-xs text-gray-500 uppercase">[KJ]</span></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 h-2 w-2 rounded-full bg-gray-300 flex-shrink-0"></span>
+                                <span><strong>HR10</strong> – En. Mohd Isa bin Saarani</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 h-2 w-2 rounded-full bg-gray-300 flex-shrink-0"></span>
+                                <span><strong>HR19</strong> – Pn. Firdarus binti Bakar</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 h-2 w-2 rounded-full bg-gray-300 flex-shrink-0"></span>
+                                <span><strong>HR12</strong> – Pn. Nabilah Huda binti Idris</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 h-2 w-2 rounded-full bg-gray-300 flex-shrink-0"></span>
+                                <span><strong>HR19</strong> – Pn. Roslina binti Salleh</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 h-2 w-2 rounded-full bg-gray-300 flex-shrink-0"></span>
+                                <span><strong>HR12</strong> – Cik Nurul Fatin Fatihah binti Mohd Khairlani</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LATEST UPDATES (BERITA) -->
+    <section id="berita" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center mb-12">
+                <div class="w-1.5 h-10 bg-permataRed mr-4 skew-x-[-12deg]"></div>
+                <div>
+                    <h2 class="font-sport text-3xl md:text-4xl font-bold text-gray-900 uppercase italic">Berita Terkini</h2>
+                    <p class="text-gray-500 font-medium">Info semasa dari padang latihan.</p>
+                </div>
+            </div>
+            
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- News cards injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- MATCH SCHEDULE (JADUAL) -->
+    <section id="jadual" class="py-20 bg-white relative">
+        <!-- Subtle pattern -->
+        <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 30px 30px;"></div>
+        
+        <div class="container mx-auto px-4 relative">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <div class="flex items-center">
+                    <div class="w-1.5 h-10 bg-permataGold mr-4 skew-x-[-12deg]"></div>
+                    <div>
+                        <h2 class="font-sport text-3xl md:text-4xl font-bold text-gray-900 uppercase italic">Jadual Perlawanan</h2>
+                        <p class="text-gray-500 font-medium">Turun padang dan berikan sokongan!</p>
+                    </div>
+                </div>
+                <!-- Filter Pill -->
+                <div class="bg-gray-100 p-1.5 rounded-full shadow-inner inline-flex">
+                    <button onclick="filterSchedule('all')" class="filter-btn active px-6 py-2 rounded-full text-sm font-bold bg-white text-gray-900 shadow-sm transition transform" data-filter="all">Semua</button>
+                    <button onclick="filterSchedule('upcoming')" class="filter-btn px-6 py-2 rounded-full text-sm font-bold text-gray-500 hover:text-permataRed transition" data-filter="upcoming">Akan Datang</button>
+                </div>
+            </div>
+
+            <div id="schedule-container" class="grid gap-5">
+                <!-- Schedule items injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- RESULTS (KEPUTUSAN) -->
+    <section id="keputusan" class="py-20 bg-gray-900 text-white relative overflow-hidden">
+        <!-- Accent Glow -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-permataRed opacity-20 blur-3xl rounded-full -mr-20 -mt-20"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-permataGold opacity-10 blur-3xl rounded-full -ml-20 -mb-20"></div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <h2 class="font-sport text-3xl md:text-4xl font-bold text-center mb-10 text-white uppercase italic tracking-wide">
+                <span class="border-b-4 border-permataRed pb-2">Keputusan Perlawanan</span>
+            </h2>
+            
+            <!-- Stats Summary -->
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 mb-12 border border-white/10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="relative">
+                        <div class="text-5xl font-black text-white" id="stat-played">0</div>
+                        <div class="text-xs font-bold text-permataGold uppercase tracking-widest mt-2">Perlawanan</div>
+                    </div>
+                    <div class="relative">
+                        <div class="text-5xl font-black text-green-400" id="stat-won">0</div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">Menang</div>
+                        <!-- Divider -->
+                        <div class="hidden md:block absolute top-2 right-0 bottom-2 w-px bg-white/20"></div>
+                    </div>
+                    <div class="relative">
+                        <div class="text-5xl font-black text-yellow-200" id="stat-draw">0</div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">Seri</div>
+                        <div class="hidden md:block absolute top-2 right-0 bottom-2 w-px bg-white/20"></div>
+                    </div>
+                    <div class="relative">
+                        <div class="text-5xl font-black text-red-400" id="stat-loss">0</div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">Kalah</div>
+                        <div class="hidden md:block absolute top-2 left-0 bottom-2 w-px bg-white/20"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Cards -->
+            <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Results injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM (PASUKAN) -->
+    <section id="pasukan" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="font-sport text-3xl md:text-4xl font-bold text-gray-900 uppercase italic mb-3">Pasukan Kami</h2>
+                <div class="inline-block bg-yellow-100 border border-yellow-200 rounded-full px-4 py-1 text-xs font-semibold text-yellow-800">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> Privasi Pelajar Dijaga
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-12 gap-8 lg:gap-12">
+                <!-- Management (Left 4 cols) -->
+                <div class="md:col-span-4">
+                    <div class="bg-white rounded-2xl p-6 shadow-lg border-t-4 border-permataRed">
+                        <h3 class="text-lg font-black text-gray-800 uppercase tracking-wide mb-6">Barisan Jurulatih</h3>
+                        <div id="coaches-container" class="space-y-4">
+                            <!-- Coaches JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Players (Right 8 cols) -->
+                <div class="md:col-span-8">
+                    <div class="bg-white rounded-2xl p-6 shadow-lg border-t-4 border-permataGold">
+                        <h3 class="text-lg font-black text-gray-800 uppercase tracking-wide mb-6">Skuad Utama 2026</h3>
+                        <div id="players-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <!-- Players JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPONSORS (PENAJA) -->
+    <section id="penaja" class="py-16 bg-white border-y border-gray-200">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold text-gray-400 uppercase tracking-widest mb-10">Rakan Strategik</h2>
+            <div id="sponsors-container" class="flex flex-wrap justify-center gap-6 md:gap-10 items-center grayscale hover:grayscale-0 transition duration-500">
+                <!-- Sponsors JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY (GALERI) -->
+    <section id="galeri" class="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="font-sport text-3xl font-bold text-permataGold italic uppercase">Galeri Aksi</h2>
+                <a href="#" class="text-sm text-gray-400 hover:text-white transition">Lihat Semua <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+            <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <!-- Images injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT (HUBUNGI) -->
+    <section id="hubungi" class="relative bg-permataRed py-20 text-white overflow-hidden">
+        <!-- Background Decor -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-10" style="background-image: repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 50%); background-size: 20px 20px;"></div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Info -->
+                <div>
+                    <h2 class="font-sport text-4xl font-bold mb-6 italic uppercase">Hubungi Kami</h2>
+                    <p class="mb-8 text-red-100 text-lg">Ada soalan mengenai latihan atau pendaftaran? Kami sedia membantu.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-5 bg-black/20 p-4 rounded-xl border border-white/10">
+                            <div class="bg-white text-permataRed w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl shadow-lg">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-permataGold uppercase text-xs tracking-wider">Lokasi Latihan</h4>
+                                <p class="font-semibold">Padang Sekolah SK Seri Makmur,<br>Sungai Besar, Selangor</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-5 bg-black/20 p-4 rounded-xl border border-white/10">
+                            <div class="bg-white text-permataRed w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl shadow-lg">
+                                <i class="fa-solid fa-envelope-open-text"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-permataGold uppercase text-xs tracking-wider">Emel Rasmi</h4>
+                                <p class="font-semibold">admin@permatafc.skserimakmur.edu.my</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="bg-white text-gray-800 p-8 rounded-3xl shadow-2xl transform md:rotate-1 hover:rotate-0 transition duration-500">
+                    <h3 class="text-xl font-black mb-6 text-gray-900 border-b pb-4">Hantar Mesej WhatsApp</h3>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Nama Penjaga / Pelajar</label>
+                            <input type="text" id="contact-name" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-permataRed focus:bg-white transition font-medium">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Topik</label>
+                            <select id="contact-topic" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-permataRed focus:bg-white transition font-medium">
+                                <option>Pendaftaran Baru</option>
+                                <option>Jadual Latihan</option>
+                                <option>Penajaan</option>
+                                <option>Lain-lain</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Mesej Ringkas</label>
+                            <textarea id="contact-msg" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-permataRed focus:bg-white transition font-medium"></textarea>
+                        </div>
+                        <button onclick="generateWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-green-500/30 transition flex items-center justify-center space-x-2 transform hover:-translate-y-1">
+                            <i class="fa-brands fa-whatsapp text-2xl"></i>
+                            <span class="text-lg">Hantar WhatsApp</span>
+                        </button>
+                        <div id="copy-feedback" class="text-center text-sm text-green-700 font-bold bg-green-100 py-2 rounded-lg hidden mt-2">
+                            <i class="fa-solid fa-check mr-1"></i> Teks disalin! Sila 'Paste' di WhatsApp.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-950 text-gray-500 py-12 border-t border-gray-900">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex items-center justify-center space-x-2 mb-6 opacity-50 grayscale hover:grayscale-0 transition">
+                <!-- Footer Logo Placeholder -->
+                <div class="bg-white rounded-full p-1 w-8 h-8 flex items-center justify-center">
+                    <i class="fa-solid fa-shield-cat text-permataRed text-sm"></i>
+                </div>
+                <span class="font-sport font-bold text-xl text-white italic">PERMATA <span class="text-permataGold">FC</span></span>
+            </div>
+            <div class="mb-8 flex justify-center space-x-8">
+                <a href="#" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-facebook fa-xl"></i></a>
+                <a href="#" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-instagram fa-xl"></i></a>
+                <a href="#" class="hover:text-white transition transform hover:scale-110"><i class="fa-brands fa-twitter fa-xl"></i></a>
+            </div>
+            <p class="text-sm mb-2 font-medium">&copy; 2026 Permata FC. Hak Cipta Terpelihara.</p>
+            <p class="text-xs opacity-40">Dibangunkan untuk komuniti sukan sekolah.</p>
+        </div>
+    </footer>
+
+    <!-- MODALS & LIGHTBOX -->
+    
+    <!-- News Modal -->
+    <div id="news-modal" class="modal fixed inset-0 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="absolute inset-0 bg-gray-900/80" onclick="closeModal('news-modal')"></div>
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl z-10 overflow-hidden transform transition-all scale-100">
+            <div class="bg-sport-gradient p-5 flex justify-between items-center text-white border-b-4 border-permataGold">
+                <span id="modal-tag" class="text-xs font-black bg-white text-red-900 px-3 py-1 rounded-full uppercase tracking-wider">TAG</span>
+                <button onclick="closeModal('news-modal')" class="hover:rotate-90 transition duration-300"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+            <div class="p-8">
+                <h3 id="modal-title" class="text-2xl font-bold mb-2 text-gray-900 leading-tight">Judul Berita</h3>
+                <p id="modal-date" class="text-sm text-gray-400 mb-6 font-mono border-b border-gray-100 pb-4">Date</p>
+                <div id="modal-body" class="text-gray-600 leading-relaxed text-lg">
+                    Content goes here...
+                </div>
+                <div class="mt-8 text-right">
+                    <button onclick="closeModal('news-modal')" class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm transition">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Lightbox -->
+    <div id="lightbox" class="modal fixed inset-0 z-[70] flex items-center justify-center bg-black bg-opacity-95 p-4 backdrop-blur-md" onclick="closeModal('lightbox')">
+        <div class="relative max-w-4xl w-full">
+            <div id="lightbox-content" class="w-full h-64 md:h-96 rounded-lg shadow-2xl border-2 border-gray-800"></div>
+            <button class="absolute -top-12 right-0 text-white text-3xl hover:text-permataGold transition"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT & DATA -->
+    <script>
+        /*******************************************************
+         * SECTION 1: DATA CONFIGURATION (EDIT HERE)
+         *******************************************************/
+        
+        const clubData = {
+            stats: {
+                played: 12,
+                won: 8,
+                draw: 2,
+                loss: 2
+            },
+            news: [
+                {
+                    id: 1,
+                    date: "14 Feb 2026",
+                    tag: "Pengumuman",
+                    title: "Pendaftaran Sesi 2026 Dibuka",
+                    summary: "Ibu bapa yang berminat mendaftarkan anak-anak Tahun 4 & 5 boleh mula mengisi borang.",
+                    content: "Pendaftaran rasmi bagi sesi 2026 kini dibuka. Sila hadir ke pejabat sukan atau hubungi Cikgu Azman untuk borang. Yuran pendaftaran adalah termasuk jersi latihan dan insurans."
+                },
+                {
+                    id: 2,
+                    date: "10 Feb 2026",
+                    tag: "Latihan",
+                    title: "Latihan Intensif Cuti Sekolah",
+                    summary: "Jadual latihan khas sempena cuti persekolahan minggu hadapan.",
+                    content: "Semua pemain Pasukan Utama (Tahun 6) dikehendaki hadir latihan pagi bermula 8:00 pagi setiap Selasa dan Khamis sepanjang cuti sekolah."
+                },
+                {
+                    id: 3,
+                    date: "02 Feb 2026",
+                    tag: "Kejohanan",
+                    title: "Naib Juara Piala Daerah",
+                    summary: "Tahniah kepada pasukan B-12 atas pencapaian membanggakan.",
+                    content: "Permata FC berjaya melangkah ke final Piala Daerah dan muncul Naib Juara selepas perlawanan sengit menentang SK Seri Bintang. Tahniah semua pemain!"
+                },
+                {
+                    id: 4,
+                    date: "28 Jan 2026",
+                    tag: "Pengumuman",
+                    title: "Jersi Baru Kelab Diperkenalkan",
+                    summary: "Wajah baru dengan tajaan dari Kedai Sukan Ali.",
+                    content: "Terima kasih kepada penaja rasmi kami. Jersi baru mengekalkan warna Merah Kuning tetapi dengan rekaan yang lebih moden dan fabrik 'breathable'."
+                },
+                {
+                    id: 5,
+                    date: "15 Jan 2026",
+                    tag: "Latihan",
+                    title: "Latihan Dibatalkan (Hujan)",
+                    summary: "Padang becak, latihan petang ini ditunda.",
+                    content: "Disebabkan hujan lebat berterusan, latihan petang ini dibatalkan demi keselamatan murid. Harap maklum."
+                },
+                {
+                    id: 6,
+                    date: "01 Jan 2026",
+                    tag: "Umum",
+                    title: "Selamat Kembali ke Sekolah",
+                    summary: "Kata-kata aluan daripada Guru Besar.",
+                    content: "Pihak pengurusan Permata FC mengucapkan selamat kembali ke sekolah. Semoga tahun ini membawa lebih banyak kejayaan akademik dan kokurikulum."
+                }
+            ],
+            schedule: [
+                { date: "20 Feb 2026", time: "08:30 PG", opponent: "SK Taman Jaya", location: "Padang A (Home)", status: "upcoming" },
+                { date: "28 Feb 2026", time: "04:30 PTG", opponent: "SK Seri Pagi", location: "Padang SK Seri Pagi", status: "upcoming" },
+                { date: "05 Mac 2026", time: "08:30 PG", opponent: "SK Bukit Tinggi", location: "Stadium Mini Daerah", status: "upcoming" },
+                { date: "10 Feb 2026", time: "04:30 PTG", opponent: "SK Mawar", location: "Padang A (Home)", status: "finished", result: "3 - 1" },
+                { date: "02 Feb 2026", time: "08:30 PG", opponent: "SK Seri Bintang", location: "Stadium Mini", status: "finished", result: "1 - 2" }
+            ],
+            results: [
+                { opponent: "SK Mawar", score: "3 - 1", outcome: "W", highlight: "Hatrik oleh Amirul (Tahun 6)" },
+                { opponent: "SK Seri Bintang", score: "1 - 2", outcome: "L", highlight: "Gol saguhati minit akhir" },
+                { opponent: "SK Putra", score: "2 - 2", outcome: "D", highlight: "Bangkit dari ketinggalan" }
+            ],
+            team: {
+                coaches: [
+                    { name: "Dr Musdalilah", role: "Presiden Kelab", icon: "fa-crown" },
+                    { name: "Puan Siti Azlina", role: "Pengurus Kelab", icon: "fa-briefcase" },
+                    { name: "Cikgu Mahfuz", role: "Ketua Jurulatih", icon: "fa-bullhorn" },
+                    { name: "Cikgu Isa", role: "Jurulatih", icon: "fa-stopwatch" }
+                ],
+                players: [
+                    { name: "Amirul H.", year: "Tahun 6" },
+                    { name: "Daniel K.", year: "Tahun 6" },
+                    { name: "Chong W.L.", year: "Tahun 6" },
+                    { name: "Muthu S.", year: "Tahun 5" },
+                    { name: "Adam F.", year: "Tahun 5" },
+                    { name: "Rizq A.", year: "Tahun 4" },
+                    { name: "Lee J.H.", year: "Tahun 4" },
+                    { name: "Kevin T.", year: "Tahun 5" }
+                ]
+            },
+            sponsors: [
+                { name: "Kedai Sukan Ali", tier: "Platinum", color: "border-gray-800", desc: "Penaja Jersi Rasmi" },
+                { name: "Kantin Sekolah", tier: "Emas", color: "border-yellow-500", desc: "Minuman Latihan" },
+                { name: "PIBG Sekolah", tier: "Perak", color: "border-gray-400", desc: "Dana Pengangkutan" },
+                { name: "Klinik Dr. Lim", tier: "Gangsa", color: "border-orange-700", desc: "Kit Pertolongan Cemas" }
+            ]
+        };
+
+        /*******************************************************
+         * SECTION 2: RENDERING LOGIC
+         *******************************************************/
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStats();
+            renderNews();
+            renderSchedule('all');
+            renderResults();
+            renderTeam();
+            renderSponsors();
+            renderGallery();
+            initAjkTabs();
+        });
+
+        // 1. Render Stats
+        function renderStats() {
+            document.getElementById('stat-played').innerText = clubData.stats.played;
+            document.getElementById('stat-won').innerText = clubData.stats.won;
+            document.getElementById('stat-draw').innerText = clubData.stats.draw;
+            document.getElementById('stat-loss').innerText = clubData.stats.loss;
+        }
+
+        // 2. Render News
+        function renderNews() {
+            const container = document.getElementById('news-container');
+            let html = '';
+            clubData.news.forEach(item => {
+                let tagClass = "bg-gray-100 text-gray-600";
+                if(item.tag === 'Latihan') tagClass = "bg-blue-50 text-blue-700 border border-blue-100";
+                if(item.tag === 'Kejohanan') tagClass = "bg-yellow-50 text-yellow-700 border border-yellow-100";
+                if(item.tag === 'Pengumuman') tagClass = "bg-red-50 text-red-700 border border-red-100";
+
+                html += `
+                <div class="bg-card-gradient rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover-lift flex flex-col h-full group">
+                    <div class="p-6 flex-grow relative">
+                        <!-- Decorative top accent -->
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent group-hover:via-permataRed transition-all duration-500"></div>
+                        
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="${tagClass} text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider">${item.tag}</span>
+                            <span class="text-xs text-gray-400 font-mono flex items-center"><i class="fa-regular fa-calendar mr-1"></i> ${item.date}</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 leading-tight group-hover:text-permataRed transition">${item.title}</h3>
+                        <p class="text-gray-500 text-sm mb-4 leading-relaxed">${item.summary}</p>
+                    </div>
+                    <div class="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex justify-end">
+                        <button onclick="openNewsModal(${item.id})" class="text-gray-900 font-bold text-xs uppercase tracking-wide hover:text-permataRed flex items-center transition">
+                            Baca Lanjut <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // 3. Render Schedule
+        function renderSchedule(filter) {
+            const container = document.getElementById('schedule-container');
+            const btns = document.querySelectorAll('.filter-btn');
+            
+            btns.forEach(btn => {
+                if(btn.dataset.filter === filter) {
+                    btn.classList.remove('text-gray-500', 'bg-white');
+                    btn.classList.add('bg-permataRed', 'text-white', 'shadow-md');
+                } else {
+                    btn.classList.add('text-gray-500', 'bg-white');
+                    btn.classList.remove('bg-permataRed', 'text-white', 'shadow-md');
+                }
+            });
+
+            let html = '';
+            const dataToRender = filter === 'all' 
+                ? clubData.schedule 
+                : clubData.schedule.filter(s => s.status === 'upcoming');
+
+            if(dataToRender.length === 0) {
+                container.innerHTML = `<div class="text-center text-gray-400 py-12 italic border-2 border-dashed border-gray-200 rounded-xl">Tiada perlawanan dalam kategori ini.</div>`;
+                return;
+            }
+
+            dataToRender.forEach(match => {
+                const isFinished = match.status === 'finished';
+                const statusBadge = isFinished 
+                    ? `<span class="bg-gray-200 text-gray-500 text-[10px] px-2 py-1 rounded font-black uppercase">Selesai</span>`
+                    : `<span class="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded font-black uppercase animate-pulse">Akan Datang</span>`;
+                
+                html += `
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-permataGold transition flex flex-col md:flex-row items-center gap-6 group">
+                    <!-- Date Box -->
+                    <div class="flex-shrink-0 text-center bg-gray-50 rounded-lg p-3 w-full md:w-20 border border-gray-200 group-hover:border-permataGold group-hover:bg-yellow-50 transition">
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest">${match.date.split(' ')[1]}</div>
+                        <div class="text-2xl font-black text-gray-800 group-hover:text-permataRed transition">${match.date.split(' ')[0]}</div>
+                    </div>
+                    
+                    <!-- Match Info -->
+                    <div class="flex-grow text-center md:text-left w-full">
+                        <div class="flex items-center justify-center md:justify-start gap-3 mb-2">
+                            ${statusBadge}
+                            <span class="text-xs text-gray-400 font-bold flex items-center"><i class="fa-regular fa-clock mr-1"></i> ${match.time}</span>
+                        </div>
+                        <h4 class="text-xl font-black text-gray-800 uppercase italic tracking-tight">
+                            <span class="text-gray-400 text-sm font-normal mr-2">VS</span> ${match.opponent}
+                        </h4>
+                        <p class="text-sm text-gray-500 mt-1 font-medium"><i class="fa-solid fa-location-dot mr-1 text-permataRed"></i> ${match.location}</p>
+                    </div>
+
+                    <!-- Result (if any) -->
+                    ${isFinished ? `<div class="flex-shrink-0 text-3xl font-black text-gray-300 tracking-widest border-l-2 border-gray-100 pl-6">${match.result}</div>` : ''}
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterSchedule(type) {
+            renderSchedule(type);
+        }
+
+        // 4. Render Results
+        function renderResults() {
+            const container = document.getElementById('results-container');
+            let html = '';
+            clubData.results.forEach(res => {
+                let cardClass = res.outcome === 'W' ? 'from-green-900 to-green-800 border-green-700' : (res.outcome === 'L' ? 'from-red-900 to-red-800 border-red-700' : 'from-gray-800 to-gray-700 border-gray-600');
+                let resultText = res.outcome === 'W' ? 'MENANG' : (res.outcome === 'L' ? 'KALAH' : 'SERI');
+                let textColor = res.outcome === 'W' ? 'text-green-400' : (res.outcome === 'L' ? 'text-red-400' : 'text-gray-400');
+
+                html += `
+                <div class="bg-gradient-to-br ${cardClass} rounded-2xl p-6 border text-center shadow-lg transform hover:scale-105 transition duration-300">
+                    <div class="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-3">Lawan</div>
+                    <h3 class="text-lg font-bold text-white mb-4 h-12 flex items-center justify-center italic">${res.opponent}</h3>
+                    <div class="text-5xl font-black text-white mb-2 tracking-tighter drop-shadow-md">${res.score}</div>
+                    <div class="text-xs font-black tracking-[0.2em] ${textColor} mb-4 border-y border-white/10 py-1 inline-block">${resultText}</div>
+                    <div class="text-xs text-white/70 italic bg-black/20 rounded px-2 py-1">"${res.highlight}"</div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // 5. Render Team
+        function renderTeam() {
+            // Coaches
+            const coachesDiv = document.getElementById('coaches-container');
+            let coachesHtml = '';
+            clubData.team.coaches.forEach(c => {
+                coachesHtml += `
+                <div class="flex items-center space-x-4 bg-gray-50 p-4 rounded-xl border border-gray-100 hover:border-permataRed transition group">
+                    <div class="w-12 h-12 bg-white border-2 border-permataRed rounded-full flex items-center justify-center text-permataRed text-xl shadow-sm group-hover:bg-permataRed group-hover:text-white transition">
+                        <i class="fa-solid ${c.icon}"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 group-hover:text-permataRed transition">${c.name}</h4>
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400">${c.role}</p>
+                    </div>
+                </div>`;
+            });
+            coachesDiv.innerHTML = coachesHtml;
+
+            // Players
+            const playersDiv = document.getElementById('players-container');
+            let playersHtml = '';
+            clubData.team.players.forEach(p => {
+                playersHtml += `
+                <div class="bg-white border border-gray-100 rounded-xl p-4 text-center hover:shadow-md hover:-translate-y-1 transition duration-300">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-3 flex items-center justify-center text-gray-400 shadow-inner">
+                        <i class="fa-solid fa-shirt"></i>
+                    </div>
+                    <div class="font-bold text-gray-900 text-sm">${p.name}</div>
+                    <div class="text-[10px] font-bold uppercase text-permataRed mt-1 bg-red-50 inline-block px-2 rounded">${p.year}</div>
+                </div>`;
+            });
+            playersDiv.innerHTML = playersHtml;
+        }
+
+        // 6. Render Sponsors
+        function renderSponsors() {
+            const container = document.getElementById('sponsors-container');
+            let html = '';
+            clubData.sponsors.forEach(s => {
+                html += `
+                <div class="w-40 text-center group">
+                    <div class="h-24 bg-white border-2 ${s.color} border-dashed rounded-xl flex items-center justify-center mb-3 group-hover:border-solid group-hover:shadow-lg transition duration-300">
+                        <span class="text-gray-800 font-bold text-sm px-2 italic">${s.name}</span>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">${s.tier}</p>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // 7. Render Gallery
+        function renderGallery() {
+            const container = document.getElementById('gallery-grid');
+            let html = '';
+            // Generate 8 placeholders with nicer gradients
+            for(let i=0; i<8; i++) {
+                // Using CSS gradients to simulate images
+                const hue = (i * 30) % 360;
+                html += `
+                <div onclick="openLightbox(${hue})" class="cursor-pointer overflow-hidden rounded-lg aspect-square relative group border-2 border-transparent hover:border-permataGold transition">
+                    <div class="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 group-hover:scale-110 transition duration-700 flex items-center justify-center">
+                         <i class="fa-solid fa-expand text-white/20 text-4xl group-hover:text-white/80 transition transform group-hover:scale-125"></i>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-3 opacity-0 group-hover:opacity-100 transition duration-300">
+                        <span class="text-white text-xs font-bold uppercase">Foto ${i+1}</span>
+                    </div>
+                </div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        // 8. AJK Tabs
+        function initAjkTabs() {
+            const buttons = document.querySelectorAll('.ajk-tab-btn');
+            const panels = document.querySelectorAll('.ajk-tab-panel');
+
+            if (!buttons.length || !panels.length) return;
+
+            const setActive = (targetId) => {
+                panels.forEach(panel => {
+                    panel.classList.toggle('hidden', panel.id !== targetId);
+                });
+
+                buttons.forEach(button => {
+                    const isActive = button.dataset.target === targetId;
+                    button.classList.toggle('bg-permataRed', isActive);
+                    button.classList.toggle('text-white', isActive);
+                    button.classList.toggle('border-permataRed', isActive);
+                    button.classList.toggle('shadow-md', isActive);
+                    button.classList.toggle('bg-white', !isActive);
+                    button.classList.toggle('text-gray-600', !isActive);
+                    button.classList.toggle('border-gray-200', !isActive);
+                });
+            };
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => setActive(button.dataset.target));
+            });
+
+            setActive(buttons[0].dataset.target);
+        }
+
+        /*******************************************************
+         * SECTION 3: INTERACTION LOGIC
+         *******************************************************/
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when link is clicked
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // News Modal Logic
+        function openNewsModal(id) {
+            const news = clubData.news.find(n => n.id === id);
+            if(!news) return;
+
+            document.getElementById('modal-title').innerText = news.title;
+            document.getElementById('modal-date').innerText = news.date;
+            document.getElementById('modal-tag').innerText = news.tag;
+            document.getElementById('modal-body').innerText = news.content;
+
+            const modal = document.getElementById('news-modal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        // Lightbox Logic
+        function openLightbox(hue) {
+            const modal = document.getElementById('lightbox');
+            const content = document.getElementById('lightbox-content');
+            
+            // Create a colored box to represent the image
+            content.style.background = `linear-gradient(135deg, hsl(${hue}, 70%, 40%), hsl(${hue + 40}, 70%, 20%))`;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // WhatsApp Logic
+        function generateWhatsApp() {
+            const name = document.getElementById('contact-name').value;
+            const topic = document.getElementById('contact-topic').value;
+            const msg = document.getElementById('contact-msg').value;
+            const feedback = document.getElementById('copy-feedback');
+
+            if(!name) {
+                alert("Sila masukkan nama.");
+                return;
+            }
+
+            const text = `Hai Permata FC, saya ${name}. \nTopik: ${topic}. \nMesej: ${msg}`;
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(text).then(() => {
+                feedback.classList.remove('hidden');
+                setTimeout(() => {
+                    feedback.classList.add('hidden');
+                }, 3000);
+            }).catch(err => {
+                console.error('Failed to copy', err);
+                alert("Gagal menyalin. Sila salin secara manual.");
+            });
+        }
+
+    </script>
+</body>
+</html>
